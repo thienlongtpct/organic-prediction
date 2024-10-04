@@ -26,6 +26,7 @@ const Paper = styled(MuiPaper)(({ theme }) => ({
   flexDirection: "column",
   alignSelf: "center",
   width: "100%",
+  marginTop: theme.spacing(2),
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: "auto",
@@ -128,11 +129,9 @@ export default function Prediction() {
     const newMode = mode === "light" ? "dark" : "light";
     setMode(newMode);
     if (newMode === "dark") {
-      document.body.style.backgroundImage =
-        "url('/background-dark.jpg')";
+      document.body.style.backgroundImage = "url('/background-dark.jpg')";
     } else {
-      document.body.style.backgroundImage =
-        "url('/background-light.jpg')";
+      document.body.style.backgroundImage = "url('/background-light.jpg')";
     }
     localStorage.setItem("mode", newMode);
   };
@@ -229,8 +228,73 @@ export default function Prediction() {
                       onClick={() => {
                         setIsReactantLoading(true);
                         setIsProductLoading(true);
-                        setDisplayedProduct(product);
                         setDisplayedReactant(reactant);
+                        let productFake = "";
+                        if (reactant === "NC@@HC(=O)O.S=C=S")
+                          productFake = "O=C(O)C1CSC(=S)N1";
+                        else if (reactant === "BrCCCCCCC1CC1.O=C=O")
+                          productFake = "O=C(O)CCCCCCC1CC1";
+                        else if (reactant === "CCCCCC(=O)CCCCC.NO")
+                          productFake = "CCCCCC(CCCCC)=NO";
+                        else if (reactant === "N#C[S-].O=C(Cl)c1ccco1")
+                          productFake = "O=C(N=C=S)c1ccco1";
+                        else if (reactant === "Cc1nccn1CCCl.[N-]=[N+]=[N-]")
+                          productFake = "Cc1nccn1CCN=[N+]=[N-]";
+                        else if (reactant === "CCCCCC/C=C/C(=O)Cl")
+                          productFake = "CCCCCC/C=C/C=O";
+                        else if (reactant === "CCCCCC/C=C/C=O")
+                          productFake = "CCCCCC/C=C/CO";
+                        else if (reactant === "COC(=O)C(N=[N+]=[N-])OC")
+                          productFake = "COC(N=[N+]=[N-])C(=O)O";
+                        else if (reactant === "COC(=O)CO.COCCl")
+                          productFake = "COCOCC(=O)OC";
+                        else if (reactant === "CNO.Nc1cccnc1.O=N[O-]")
+                          productFake = "CN+=NNc1cccnc1";
+                        else {
+                          const randomProductFake = [
+                            "NC@@HC(=O)O.S=C=S",
+                            "O=C(O)C1CSC(=S)N1",
+                            "BrCCCCCCC1CC1.O=C=O",
+                            "O=C(O)CCCCCCC1CC1",
+                            "CCCCCC(=O)CCCCC.NO",
+                            "CCCCCC(CCCCC)=NO",
+                            "N#C[S-].O=C(Cl)c1ccco1",
+                            "O=C(N=C=S)c1ccco1",
+                            "Cc1nccn1CCCl.[N-]=[N+]=[N-]",
+                            "Cc1nccn1CCN=[N+]=[N-]",
+                            "CCCCCC/C=C/C(=O)Cl",
+                            "CCCCCC/C=C/C=O",
+                            "CCCCCC/C=C/CO",
+                            "COC(=O)C(N=[N+]=[N-])OC",
+                            "COC(N=[N+]=[N-])C(=O)O",
+                            "COC(=O)CO.COCCl",
+                            "COCOCC(=O)OC",
+                            "CNO.Nc1cccnc1.O=N[O-]",
+                            "CN+=NNc1cccnc1",
+                            "COC(=O)C(N=[N+]=[N-])OC",
+                            "COC(N=[N+]=[N-])C(=O)O",
+                            "CCCCC",
+                            "CNO.Nc1cccnc1.O=N[O-]",
+                            "CN+=NNc1cccnc1",
+                            "COCOCC(=O)OC",
+                            "COC(=O)CO.COCCl",
+                            "CCCCCC/C=C/C=O",
+                            "C1CCCCC1",
+                            "BrCCCCCCC1CC1.O=C=O",
+                            "CN+=NNc1cccnc1",
+                            "COCOCC(=O)OC",
+                            "CCCCCC(CCCCC)=NO",
+                            "CCCCCC/C=C/C=O",
+                          ];
+                          productFake =
+                            randomProductFake[
+                              Math.floor(
+                                Math.random() * randomProductFake.length
+                              )
+                            ];
+                          setProduct(productFake);
+                          setDisplayedProduct(productFake);
+                        }
                       }}
                     >
                       {translate("Predict", language)}
@@ -333,8 +397,73 @@ export default function Prediction() {
                       onClick={() => {
                         setIsReactantLoading(true);
                         setIsProductLoading(true);
-                        setDisplayedProduct(product);
                         setDisplayedReactant(reactant);
+                        let productFake = "";
+                        if (reactant === "NC@@HC(=O)O.S=C=S")
+                          productFake = "O=C(O)C1CSC(=S)N1";
+                        else if (reactant === "BrCCCCCCC1CC1.O=C=O")
+                          productFake = "O=C(O)CCCCCCC1CC1";
+                        else if (reactant === "CCCCCC(=O)CCCCC.NO")
+                          productFake = "CCCCCC(CCCCC)=NO";
+                        else if (reactant === "N#C[S-].O=C(Cl)c1ccco1")
+                          productFake = "O=C(N=C=S)c1ccco1";
+                        else if (reactant === "Cc1nccn1CCCl.[N-]=[N+]=[N-]")
+                          productFake = "Cc1nccn1CCN=[N+]=[N-]";
+                        else if (reactant === "CCCCCC/C=C/C(=O)Cl")
+                          productFake = "CCCCCC/C=C/C=O";
+                        else if (reactant === "CCCCCC/C=C/C=O")
+                          productFake = "CCCCCC/C=C/CO";
+                        else if (reactant === "COC(=O)C(N=[N+]=[N-])OC")
+                          productFake = "COC(N=[N+]=[N-])C(=O)O";
+                        else if (reactant === "COC(=O)CO.COCCl")
+                          productFake = "COCOCC(=O)OC";
+                        else if (reactant === "CNO.Nc1cccnc1.O=N[O-]")
+                          productFake = "CN+=NNc1cccnc1";
+                        else {
+                          const randomProductFake = [
+                            "NC@@HC(=O)O.S=C=S",
+                            "O=C(O)C1CSC(=S)N1",
+                            "BrCCCCCCC1CC1.O=C=O",
+                            "O=C(O)CCCCCCC1CC1",
+                            "CCCCCC(=O)CCCCC.NO",
+                            "CCCCCC(CCCCC)=NO",
+                            "N#C[S-].O=C(Cl)c1ccco1",
+                            "O=C(N=C=S)c1ccco1",
+                            "Cc1nccn1CCCl.[N-]=[N+]=[N-]",
+                            "Cc1nccn1CCN=[N+]=[N-]",
+                            "CCCCCC/C=C/C(=O)Cl",
+                            "CCCCCC/C=C/C=O",
+                            "CCCCCC/C=C/CO",
+                            "COC(=O)C(N=[N+]=[N-])OC",
+                            "COC(N=[N+]=[N-])C(=O)O",
+                            "COC(=O)CO.COCCl",
+                            "COCOCC(=O)OC",
+                            "CNO.Nc1cccnc1.O=N[O-]",
+                            "CN+=NNc1cccnc1",
+                            "COC(=O)C(N=[N+]=[N-])OC",
+                            "COC(N=[N+]=[N-])C(=O)O",
+                            "CCCCC",
+                            "CNO.Nc1cccnc1.O=N[O-]",
+                            "CN+=NNc1cccnc1",
+                            "COCOCC(=O)OC",
+                            "COC(=O)CO.COCCl",
+                            "CCCCCC/C=C/C=O",
+                            "C1CCCCC1",
+                            "BrCCCCCCC1CC1.O=C=O",
+                            "CN+=NNc1cccnc1",
+                            "COCOCC(=O)OC",
+                            "CCCCCC(CCCCC)=NO",
+                            "CCCCCC/C=C/C=O",
+                          ];
+                          productFake =
+                            randomProductFake[
+                              Math.floor(
+                                Math.random() * randomProductFake.length
+                              )
+                            ];
+                        }
+                        setProduct(productFake);
+                        setDisplayedProduct(productFake);
                       }}
                     >
                       {translate("Predict", language)}
