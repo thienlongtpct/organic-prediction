@@ -7,9 +7,9 @@ import {
   surfacesCustomizations,
 } from './customizations';
 
-export default function getPredictionTheme(mode) {
+export default function getPredictionTheme() {
   return {
-    ...getDesignTokens(mode),
+    ...getDesignTokens(),
     components: {
       ...inputsCustomizations,
       ...dataDisplayCustomizations,

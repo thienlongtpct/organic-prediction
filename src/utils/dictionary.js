@@ -31,6 +31,9 @@ const dictionary = {
   },
   "Result": {
     "vi": "Kết quả",
+  },
+  "Formula": {
+    "vi": "Công thức",
   }
 };
 

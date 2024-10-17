@@ -3,30 +3,34 @@ import {
   Box,
   Button,
   CssBaseline,
-  FormLabel,
   FormControl,
   TextField,
   Typography,
-  Stack,
-  Paper as MuiPaper,
-  Grid2 as Grid,
   createTheme,
   ThemeProvider,
   styled,
-  Divider as MuiDivider,
+  InputAdornment,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
-import MainBar from "../bar";
-import MoleculeStructure from "../components/MoleculeStructure";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import {
+  Molecule2DStructure,
+  Molecule3DStructure,
+} from "../components/molecule-structure";
 import getPredictionTheme from "../theme/getPredictionTheme";
 import { useParentSize } from "@cutting/use-get-parent-size";
 import { translate } from "../utils/dictionary";
+import ScienceIcon from "@mui/icons-material/Science";
+import LooksTwoIcon from "@mui/icons-material/LooksTwo";
+import Looks3Icon from "@mui/icons-material/Looks3";
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
+const PageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignSelf: "center",
-  width: "100%",
-  marginTop: theme.spacing(2),
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: "auto",
@@ -44,97 +48,109 @@ const Paper = styled(MuiPaper)(({ theme }) => ({
   [theme.breakpoints.up("xl")]: {
     width: "1200px",
   },
+}));
+
+const PredictionContainer = styled(Box)(() => ({
+  padding: 4,
+  margin: 4,
+  display: "flex",
+  flexDirection: "column",
+}));
+
+const OutterAccordion = styled((props) => (
+  <Accordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: "none",
+  margin: 0,
+  overflow: "visible",
+  "&:not(:last-child)": {
+    marginBottom: theme.spacing(2),
+  },
+}));
+
+const InnerAccordion = styled((props) => (
+  <Accordion disableGutters elevation={0} square {...props} />
+))(() => ({
+  margin: 0,
+  border: "none",
+  overflow: "visible",
+}));
+
+const OutterAccordionSummary = styled((props) => (
+  <AccordionSummary
+    expandIcon={
+      <ScienceIcon
+        sx={(theme) => ({ color: theme.palette.primary.contrastText })}
+      />
+    }
+    {...props}
+  />
+))(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.primary.contrastText,
+  boxShadow: `${theme.palette.primary.dark} 0px 0px 0px 3px`,
+  borderRadius: theme.shape.borderRadius,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.darker,
+  },
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotateZ(-45deg)",
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1),
+  },
   ...theme.applyStyles("dark", {
-    boxShadow:
-      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.darker,
+    },
   }),
 }));
 
-const Divider = styled(MuiDivider)(({ theme }) => ({
-  margin: theme.spacing(2),
+const InnerAccordionSummary = styled((props) => (
+  <AccordionSummary expandIcon={<ScienceIcon />} {...props} />
+))(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  margin: 0,
+  borderRadius: 0,
+  borderBottom: `1px solid ${theme.palette.primary.dark}`,
+  overflow: "visible",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotateZ(-45deg)",
+  },
+  "&:hover": {
+    backgroundColor: theme.palette.primary.lighter,
+  },
+  ...theme.applyStyles("dark", {
+    "&:hover": {
+      backgroundColor: theme.palette.primary.darker,
+    },
+  }),
 }));
 
-const PredictionContainer = styled(Stack)(({ theme }) => ({
-  height: "100%",
-  padding: 4,
-  margin: 4,
-  // backgroundImage:
-  //   "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
-  // backgroundRepeat: "no-repeat",
-  // ...theme.applyStyles("dark", {
-  //   backgroundImage:
-  //     "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
-  // }),
+const OutterAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2, 0, 2, 8),
 }));
-
-const BigScreenGrid = styled(Grid)(({ theme }) => ({
-  [theme.breakpoints.up("md")]: {
-    display: "initial",
-  },
-  [theme.breakpoints.down("md")]: {
-    display: "none",
-  },
-}));
-const SmallScreenGrid = styled(Grid)(({ theme }) => ({
-  [theme.breakpoints.up("md")]: {
-    display: "none",
-  },
-  [theme.breakpoints.down("md")]: {
-    display: "initial",
-  },
+const InnerAccordionDetails = styled(AccordionDetails)(() => ({
+  display: "flex",
+  justifyContent: "center",
+  border: "none",
 }));
 
 export default function Prediction() {
-  const [theme, setTheme] = React.useState(
-    localStorage.getItem("theme") || "material"
-  );
   const [language, setLanguage] = React.useState(
     localStorage.getItem("language") || "vi"
   );
-  const [mode, setMode] = React.useState("light");
 
   const [reactant, setReactant] = React.useState("N#C[S-].O=C(Cl)c1ccco1");
-  const [displayedReactant, setDisplayedReactant] = React.useState(
-    "N#C[S-].O=C(Cl)c1ccco1"
-  );
-  const [product, setProduct] = React.useState("O=C(N=C=S)c1ccco1");
+  const [displayedReactant, setDisplayedReactant] = React.useState(reactant);
   const [displayedProduct, setDisplayedProduct] =
     React.useState("O=C(N=C=S)c1ccco1");
 
-  const [isReactantLoading, setIsReactantLoading] = React.useState(true);
-  const [isProductLoading, setIsProductLoading] = React.useState(true);
+  const [reactantExpanded, setReactantExpanded] = React.useState("formula");
+  const [productExpanded, setProductExpanded] = React.useState("formula");
 
-  const materialTheme = createTheme({ palette: { mode } });
-  const customTheme = createTheme(getPredictionTheme(mode));
-
-  React.useEffect(() => {
-    const savedMode = localStorage.getItem("mode");
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setMode(systemPrefersDark ? "dark" : "light");
-    }
-  }, []);
-
-  const selectTheme = (event) => {
-    const newTheme = event.target.value;
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
-  const toggleMode = () => {
-    const newMode = mode === "light" ? "dark" : "light";
-    setMode(newMode);
-    if (newMode === "dark") {
-      document.body.style.backgroundImage = "url('/background-dark.jpg')";
-    } else {
-      document.body.style.backgroundImage = "url('/background-light.jpg')";
-    }
-    localStorage.setItem("mode", newMode);
-  };
+  const customTheme = createTheme(getPredictionTheme());
 
   const toggleLanguage = () => {
     const newLanguage = language === "vi" ? "en" : "vi";
@@ -142,339 +158,319 @@ export default function Prediction() {
     localStorage.setItem("language", newLanguage);
   };
 
+  const toggleReactantExpanded = (keyword) => {
+    if (reactantExpanded === keyword) setReactantExpanded("");
+    else setReactantExpanded(keyword);
+  };
+
+  const toggleProductExpanded = (keyword) => {
+    if (productExpanded === keyword) setProductExpanded("");
+    else setProductExpanded(keyword);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
-  const gridItemRef = React.useRef(null);
-  const { width: widthGrid = 0 } = useParentSize(gridItemRef, {
+  const accordionRef = React.useRef(null);
+  const { width: widthAccordion = 0 } = useParentSize(accordionRef, {
     debounceDelay: 1000,
   });
 
+  const accordionIcon = (theme) => ({
+    position: "absolute",
+    left: theme.spacing(-4),
+  });
+
   return (
-    <MainBar
-      theme={theme}
-      selectTheme={selectTheme}
-      language={language}
-      toggleLanguage={toggleLanguage}
-      mode={mode}
-      toggleMode={toggleMode}
-    >
-      <ThemeProvider theme={theme === "custom" ? customTheme : materialTheme}>
-        <CssBaseline enableColorScheme />
-        <PredictionContainer direction="column" justifyContent="space-between">
-          <Stack sx={{ justifyContent: "center", height: "100dvh", p: 2 }}>
-            <Paper
-              variant="outlined"
-              className={mode === "dark" ? "dark-mode" : "light-mode"}
+    <ThemeProvider theme={customTheme}>
+      <CssBaseline enableColorScheme />
+      <Box
+        sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "space-between" }}
+      >
+        <Header language={language} toggleLanguage={toggleLanguage} />
+        <PageContainer>
+          <PredictionContainer>
+            <Box display="flex" justifyContent="center" margin={4}>
+              <img
+                src="logo.png"
+                width={256}
+                alt="ChePred logo"
+                loading="lazy"
+              />
+            </Box>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                marginBottom: 4,
+              }}
             >
-              <Typography
-                component="h1"
-                variant="h4"
-                sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-              >
-                {translate("Organic Chemistry Reaction Prediction", language)}
-              </Typography>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-              >
-                <Grid container spacing={2}>
-                  <Grid size={12}>
-                    <Divider variant="middle" />
-                  </Grid>
-
-                  <BigScreenGrid size={12}>
-                    <Typography component="h2" variant="p">
-                      {translate("SMILES inputs", language)}
-                    </Typography>
-                  </BigScreenGrid>
-
-                  <SmallScreenGrid size={12}>
-                    <Typography component="h2" variant="p">
-                      {translate("Reactants", language)}
-                    </Typography>
-                  </SmallScreenGrid>
-
-                  <Grid size={{ xs: 12, md: 6 }} ref={gridItemRef}>
-                    <FormControl fullWidth>
-                      <FormLabel htmlFor="reactant">
-                        <Typography variant="subtitle2">
-                          {translate("Reactants", language)}
-                        </Typography>
-                      </FormLabel>
-                      <TextField
-                        autoComplete="reactant"
-                        name="reactant"
-                        required
-                        fullWidth
-                        id="reactant"
-                        placeholder={translate("Known reactants", language)}
-                        value={reactant}
-                        onChange={(event) => {
-                          setReactant(event.target.value);
-                        }}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <SmallScreenGrid size={{ xs: 12, md: 6 }}>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      disabled={isReactantLoading || isProductLoading}
-                      onClick={() => {
-                        setIsReactantLoading(true);
-                        setIsProductLoading(true);
-                        setDisplayedReactant(reactant);
-                        let productFake = "";
-                        if (reactant === "NC@@HC(=O)O.S=C=S")
-                          productFake = "O=C(O)C1CSC(=S)N1";
-                        else if (reactant === "BrCCCCCCC1CC1.O=C=O")
-                          productFake = "O=C(O)CCCCCCC1CC1";
-                        else if (reactant === "CCCCCC(=O)CCCCC.NO")
-                          productFake = "CCCCCC(CCCCC)=NO";
-                        else if (reactant === "N#C[S-].O=C(Cl)c1ccco1")
-                          productFake = "O=C(N=C=S)c1ccco1";
-                        else if (reactant === "Cc1nccn1CCCl.[N-]=[N+]=[N-]")
-                          productFake = "Cc1nccn1CCN=[N+]=[N-]";
-                        else if (reactant === "CCCCCC/C=C/C(=O)Cl")
-                          productFake = "CCCCCC/C=C/C=O";
-                        else if (reactant === "CCCCCC/C=C/C=O")
-                          productFake = "CCCCCC/C=C/CO";
-                        else if (reactant === "COC(=O)C(N=[N+]=[N-])OC")
-                          productFake = "COC(N=[N+]=[N-])C(=O)O";
-                        else if (reactant === "COC(=O)CO.COCCl")
-                          productFake = "COCOCC(=O)OC";
-                        else if (reactant === "CNO.Nc1cccnc1.O=N[O-]")
-                          productFake = "CN+=NNc1cccnc1";
-                        else {
-                          const randomProductFake = [
-                            "NC@@HC(=O)O.S=C=S",
-                            "O=C(O)C1CSC(=S)N1",
-                            "BrCCCCCCC1CC1.O=C=O",
-                            "O=C(O)CCCCCCC1CC1",
-                            "CCCCCC(=O)CCCCC.NO",
-                            "CCCCCC(CCCCC)=NO",
-                            "N#C[S-].O=C(Cl)c1ccco1",
-                            "O=C(N=C=S)c1ccco1",
-                            "Cc1nccn1CCCl.[N-]=[N+]=[N-]",
-                            "Cc1nccn1CCN=[N+]=[N-]",
-                            "CCCCCC/C=C/C(=O)Cl",
-                            "CCCCCC/C=C/C=O",
-                            "CCCCCC/C=C/CO",
-                            "COC(=O)C(N=[N+]=[N-])OC",
-                            "COC(N=[N+]=[N-])C(=O)O",
-                            "COC(=O)CO.COCCl",
-                            "COCOCC(=O)OC",
-                            "CNO.Nc1cccnc1.O=N[O-]",
-                            "CN+=NNc1cccnc1",
-                            "COC(=O)C(N=[N+]=[N-])OC",
-                            "COC(N=[N+]=[N-])C(=O)O",
-                            "CCCCC",
-                            "CNO.Nc1cccnc1.O=N[O-]",
-                            "CN+=NNc1cccnc1",
-                            "COCOCC(=O)OC",
-                            "COC(=O)CO.COCCl",
-                            "CCCCCC/C=C/C=O",
-                            "C1CCCCC1",
-                            "BrCCCCCCC1CC1.O=C=O",
-                            "CN+=NNc1cccnc1",
-                            "COCOCC(=O)OC",
-                            "CCCCCC(CCCCC)=NO",
-                            "CCCCCC/C=C/C=O",
-                          ];
-                          productFake =
-                            randomProductFake[
-                              Math.floor(
-                                Math.random() * randomProductFake.length
+              <FormControl fullWidth>
+                <TextField
+                  autoComplete="reactant"
+                  name="reactant"
+                  required
+                  fullWidth
+                  id="reactant"
+                  placeholder={translate("Reactants", language)}
+                  value={reactant}
+                  onChange={(event) => {
+                    setReactant(event.target.value);
+                  }}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            // disabled={isReactantLoading || isProductLoading}
+                            onClick={() => {
+                              setDisplayedReactant(reactant);
+                              let productFake = "";
+                              if (reactant === "NC@@HC(=O)O.S=C=S")
+                                productFake = "O=C(O)C1CSC(=S)N1";
+                              else if (reactant === "BrCCCCCCC1CC1.O=C=O")
+                                productFake = "O=C(O)CCCCCCC1CC1";
+                              else if (reactant === "CCCCCC(=O)CCCCC.NO")
+                                productFake = "CCCCCC(CCCCC)=NO";
+                              else if (reactant === "N#C[S-].O=C(Cl)c1ccco1")
+                                productFake = "O=C(N=C=S)c1ccco1";
+                              else if (
+                                reactant === "Cc1nccn1CCCl.[N-]=[N+]=[N-]"
                               )
-                            ];
-                          setProduct(productFake);
-                          setDisplayedProduct(productFake);
-                        }
-                      }}
+                                productFake = "Cc1nccn1CCN=[N+]=[N-]";
+                              else if (reactant === "CCCCCC/C=C/C(=O)Cl")
+                                productFake = "CCCCCC/C=C/C=O";
+                              else if (reactant === "CCCCCC/C=C/C=O")
+                                productFake = "CCCCCC/C=C/CO";
+                              else if (reactant === "COC(=O)C(N=[N+]=[N-])OC")
+                                productFake = "COC(N=[N+]=[N-])C(=O)O";
+                              else if (reactant === "COC(=O)CO.COCCl")
+                                productFake = "COCOCC(=O)OC";
+                              else if (reactant === "CNO.Nc1cccnc1.O=N[O-]")
+                                productFake = "CN+=NNc1cccnc1";
+                              else {
+                                const randomProductFake = [
+                                  "NC@@HC(=O)O.S=C=S",
+                                  "O=C(O)C1CSC(=S)N1",
+                                  "BrCCCCCCC1CC1.O=C=O",
+                                  "O=C(O)CCCCCCC1CC1",
+                                  "CCCCCC(=O)CCCCC.NO",
+                                  "CCCCCC(CCCCC)=NO",
+                                  "N#C[S-].O=C(Cl)c1ccco1",
+                                  "O=C(N=C=S)c1ccco1",
+                                  "Cc1nccn1CCCl.[N-]=[N+]=[N-]",
+                                  "Cc1nccn1CCN=[N+]=[N-]",
+                                  "CCCCCC/C=C/C(=O)Cl",
+                                  "CCCCCC/C=C/C=O",
+                                  "CCCCCC/C=C/CO",
+                                  "COC(=O)C(N=[N+]=[N-])OC",
+                                  "COC(N=[N+]=[N-])C(=O)O",
+                                  "COC(=O)CO.COCCl",
+                                  "COCOCC(=O)OC",
+                                  "CNO.Nc1cccnc1.O=N[O-]",
+                                  "CN+=NNc1cccnc1",
+                                  "COC(=O)C(N=[N+]=[N-])OC",
+                                  "COC(N=[N+]=[N-])C(=O)O",
+                                  "CCCCC",
+                                  "CNO.Nc1cccnc1.O=N[O-]",
+                                  "CN+=NNc1cccnc1",
+                                  "COCOCC(=O)OC",
+                                  "COC(=O)CO.COCCl",
+                                  "CCCCCC/C=C/C=O",
+                                  "C1CCCCC1",
+                                  "BrCCCCCCC1CC1.O=C=O",
+                                  "CN+=NNc1cccnc1",
+                                  "COCOCC(=O)OC",
+                                  "CCCCCC(CCCCC)=NO",
+                                  "CCCCCC/C=C/C=O",
+                                ];
+                                productFake =
+                                  randomProductFake[
+                                    Math.floor(
+                                      Math.random() * randomProductFake.length
+                                    )
+                                  ];
+                                setDisplayedProduct(productFake);
+                              }
+                            }}
+                          >
+                            {translate("Predict", language)}
+                          </Button>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </FormControl>
+            </Box>
+
+            <OutterAccordion>
+              <OutterAccordionSummary
+                aria-controls="reactant-content"
+                id="reactant-header"
+              >
+                <Typography component="h2" variant="p">
+                  {translate("Reactants", language)}
+                </Typography>
+              </OutterAccordionSummary>
+              <OutterAccordionDetails>
+                <InnerAccordion
+                  expanded={reactantExpanded === "formula"}
+                  onChange={() => toggleReactantExpanded("formula")}
+                >
+                  <InnerAccordionSummary
+                    aria-controls="reactant-formula-content"
+                    id="reactant-formula-header"
+                  >
+                    <ScienceIcon
+                      color="primary"
+                      sx={accordionIcon}
+                    ></ScienceIcon>
+                    {translate("Formula", language)}
+                  </InnerAccordionSummary>
+                  <InnerAccordionDetails>
+                    <Typography
+                      component="p"
+                      fontFamily="Serif"
+                      fontSize={20}
+                      fontWeight="bold"
                     >
-                      {translate("Predict", language)}
-                    </Button>
-                    <Divider variant="middle">
-                      {translate("Result", language)}
-                    </Divider>
-                    <Typography component="h2" variant="p">
-                      {translate("Products", language)}
+                      {displayedReactant}
                     </Typography>
-                  </SmallScreenGrid>
-
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <FormControl fullWidth>
-                      <FormLabel htmlFor="product">
-                        <Typography variant="subtitle2">
-                          {translate("Products", language)}
-                        </Typography>
-                      </FormLabel>
-                      <TextField
-                        autoComplete="product"
-                        name="product"
-                        required
-                        fullWidth
-                        id="product"
-                        placeholder={translate("Predicted products", language)}
-                        value={product}
-                        disabled
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <BigScreenGrid size={12}>
-                    <Divider variant="middle" />
-                  </BigScreenGrid>
-
-                  <Grid size={12}>
-                    <Typography component="h2" variant="p">
-                      {translate("Structure diagram", language)}
-                    </Typography>
-                  </Grid>
-
-                  <BigScreenGrid size={{ xs: 12, md: 6 }}>
-                    <MoleculeStructure
-                      id="reactant-molecule"
+                  </InnerAccordionDetails>
+                </InnerAccordion>
+                <InnerAccordion
+                  expanded={reactantExpanded === "2d"}
+                  onChange={() => toggleReactantExpanded("2d")}
+                >
+                  <InnerAccordionSummary
+                    aria-controls="reactant-2d-content"
+                    id="reactant-2d-header"
+                  >
+                    <LooksTwoIcon
+                      color="primary"
+                      sx={accordionIcon}
+                    ></LooksTwoIcon>
+                    {translate("Structure diagram", language)}
+                  </InnerAccordionSummary>
+                  <InnerAccordionDetails ref={accordionRef}>
+                    <Molecule2DStructure
+                      id="reactant-2d-molecule"
                       structure={displayedReactant}
-                      width={Math.round(widthGrid)}
-                      height={Math.round(widthGrid)}
-                      isLoading={isReactantLoading}
-                      setIsLoading={setIsReactantLoading}
-                      svgMode
+                      width={Math.round(widthAccordion)}
+                      height={Math.min(400, Math.round(widthAccordion))}
                     />
+                  </InnerAccordionDetails>
+                </InnerAccordion>
+                <InnerAccordion
+                  expanded={reactantExpanded === "3d"}
+                  onChange={() => toggleReactantExpanded("3d")}
+                >
+                  <InnerAccordionSummary
+                    aria-controls="reactant-3d-content"
+                    id="reactant-3d-header"
+                  >
+                    <Looks3Icon color="primary" sx={accordionIcon}></Looks3Icon>
+                    {translate("3D structure", language)}
+                  </InnerAccordionSummary>
+                  <InnerAccordionDetails>
+                    <Molecule3DStructure
+                      id="reactant-3d-molecule"
+                      structure={displayedReactant}
+                      width={Math.round(widthAccordion)}
+                      height={Math.min(400, Math.round(widthAccordion))}
+                    />
+                  </InnerAccordionDetails>
+                </InnerAccordion>
+              </OutterAccordionDetails>
+            </OutterAccordion>
 
-                    <Typography
-                      variant="subtitle2"
-                      fontStyle="italic"
-                      align="center"
-                    >
-                      {`${translate(
-                        "Structure of",
-                        language
-                      )} ${displayedReactant}.`}
+            <OutterAccordion>
+              <OutterAccordionSummary
+                aria-controls="product-content"
+                id="product-header"
+              >
+                <Typography component="h2" variant="p">
+                  {translate("Products", language)}
+                </Typography>
+              </OutterAccordionSummary>
+              <OutterAccordionDetails>
+                <InnerAccordion
+                  expanded={productExpanded === "formula"}
+                  onChange={() => toggleProductExpanded("formula")}
+                >
+                  <InnerAccordionSummary
+                    aria-controls="product-formula-content"
+                    id="product-formula-header"
+                  >
+                    <ScienceIcon
+                      color="primary"
+                      sx={accordionIcon}
+                    ></ScienceIcon>
+                    {translate("Formula", language)}
+                  </InnerAccordionSummary>
+                  <InnerAccordionDetails>
+                    <Typography variant="subtitle2" fontStyle="italic">
+                      {displayedProduct}
                     </Typography>
-                  </BigScreenGrid>
-
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <MoleculeStructure
-                      id="product-molecule"
+                  </InnerAccordionDetails>
+                </InnerAccordion>
+                <InnerAccordion
+                  expanded={productExpanded === "2d"}
+                  onChange={() => toggleProductExpanded("2d")}
+                >
+                  <InnerAccordionSummary
+                    aria-controls="product-2d-content"
+                    id="product-2d-header"
+                  >
+                    <LooksTwoIcon
+                      color="primary"
+                      sx={accordionIcon}
+                    ></LooksTwoIcon>
+                    {translate("Structure diagram", language)}
+                  </InnerAccordionSummary>
+                  <InnerAccordionDetails>
+                    <Molecule2DStructure
+                      id="product-2d-molecule"
                       structure={displayedProduct}
-                      width={Math.round(widthGrid)}
-                      height={Math.round(widthGrid)}
-                      isLoading={isProductLoading}
-                      setIsLoading={setIsProductLoading}
-                      svgMode
+                      width={Math.round(widthAccordion)}
+                      height={Math.min(400, Math.round(widthAccordion))}
                     />
-                    <Typography
-                      variant="subtitle2"
-                      fontStyle="italic"
-                      align="center"
-                    >
-                      {`${translate(
-                        "Structure of",
-                        language
-                      )} ${displayedProduct}.`}
-                    </Typography>
-                  </Grid>
-                  {/* 
-                  <Grid size={12}>
-                    <Divider variant="middle" />
-                    <Typography component="h2" variant="p">
-                      {translate("3D structure", language)}
-                    </Typography>
-                  </Grid> */}
-                  <BigScreenGrid size={12}>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      disabled={isReactantLoading || isProductLoading}
-                      onClick={() => {
-                        setIsReactantLoading(true);
-                        setIsProductLoading(true);
-                        setDisplayedReactant(reactant);
-                        let productFake = "";
-                        if (reactant === "NC@@HC(=O)O.S=C=S")
-                          productFake = "O=C(O)C1CSC(=S)N1";
-                        else if (reactant === "BrCCCCCCC1CC1.O=C=O")
-                          productFake = "O=C(O)CCCCCCC1CC1";
-                        else if (reactant === "CCCCCC(=O)CCCCC.NO")
-                          productFake = "CCCCCC(CCCCC)=NO";
-                        else if (reactant === "N#C[S-].O=C(Cl)c1ccco1")
-                          productFake = "O=C(N=C=S)c1ccco1";
-                        else if (reactant === "Cc1nccn1CCCl.[N-]=[N+]=[N-]")
-                          productFake = "Cc1nccn1CCN=[N+]=[N-]";
-                        else if (reactant === "CCCCCC/C=C/C(=O)Cl")
-                          productFake = "CCCCCC/C=C/C=O";
-                        else if (reactant === "CCCCCC/C=C/C=O")
-                          productFake = "CCCCCC/C=C/CO";
-                        else if (reactant === "COC(=O)C(N=[N+]=[N-])OC")
-                          productFake = "COC(N=[N+]=[N-])C(=O)O";
-                        else if (reactant === "COC(=O)CO.COCCl")
-                          productFake = "COCOCC(=O)OC";
-                        else if (reactant === "CNO.Nc1cccnc1.O=N[O-]")
-                          productFake = "CN+=NNc1cccnc1";
-                        else {
-                          const randomProductFake = [
-                            "NC@@HC(=O)O.S=C=S",
-                            "O=C(O)C1CSC(=S)N1",
-                            "BrCCCCCCC1CC1.O=C=O",
-                            "O=C(O)CCCCCCC1CC1",
-                            "CCCCCC(=O)CCCCC.NO",
-                            "CCCCCC(CCCCC)=NO",
-                            "N#C[S-].O=C(Cl)c1ccco1",
-                            "O=C(N=C=S)c1ccco1",
-                            "Cc1nccn1CCCl.[N-]=[N+]=[N-]",
-                            "Cc1nccn1CCN=[N+]=[N-]",
-                            "CCCCCC/C=C/C(=O)Cl",
-                            "CCCCCC/C=C/C=O",
-                            "CCCCCC/C=C/CO",
-                            "COC(=O)C(N=[N+]=[N-])OC",
-                            "COC(N=[N+]=[N-])C(=O)O",
-                            "COC(=O)CO.COCCl",
-                            "COCOCC(=O)OC",
-                            "CNO.Nc1cccnc1.O=N[O-]",
-                            "CN+=NNc1cccnc1",
-                            "COC(=O)C(N=[N+]=[N-])OC",
-                            "COC(N=[N+]=[N-])C(=O)O",
-                            "CCCCC",
-                            "CNO.Nc1cccnc1.O=N[O-]",
-                            "CN+=NNc1cccnc1",
-                            "COCOCC(=O)OC",
-                            "COC(=O)CO.COCCl",
-                            "CCCCCC/C=C/C=O",
-                            "C1CCCCC1",
-                            "BrCCCCCCC1CC1.O=C=O",
-                            "CN+=NNc1cccnc1",
-                            "COCOCC(=O)OC",
-                            "CCCCCC(CCCCC)=NO",
-                            "CCCCCC/C=C/C=O",
-                          ];
-                          productFake =
-                            randomProductFake[
-                              Math.floor(
-                                Math.random() * randomProductFake.length
-                              )
-                            ];
-                        }
-                        setProduct(productFake);
-                        setDisplayedProduct(productFake);
-                      }}
-                    >
-                      {translate("Predict", language)}
-                    </Button>
-                  </BigScreenGrid>
-                </Grid>
-              </Box>
-            </Paper>
-          </Stack>
-        </PredictionContainer>
-      </ThemeProvider>
-    </MainBar>
+                  </InnerAccordionDetails>
+                </InnerAccordion>
+                <InnerAccordion
+                  expanded={productExpanded === "3d"}
+                  onChange={() => toggleProductExpanded("3d")}
+                >
+                  <InnerAccordionSummary
+                    aria-controls="product-3d-content"
+                    id="product-3d-header"
+                  >
+                    <Looks3Icon color="primary" sx={accordionIcon}></Looks3Icon>
+                    {translate("3D structure", language)}
+                  </InnerAccordionSummary>
+                  <InnerAccordionDetails>
+                    <Molecule3DStructure
+                      id="product-3d-molecule"
+                      structure={displayedProduct}
+                      width={Math.round(widthAccordion)}
+                      height={Math.min(400, Math.round(widthAccordion))}
+                    />
+                  </InnerAccordionDetails>
+                </InnerAccordion>
+              </OutterAccordionDetails>
+            </OutterAccordion>
+          </PredictionContainer>
+        </PageContainer>
+        <Footer />
+      </Box>
+    </ThemeProvider>
   );
 }

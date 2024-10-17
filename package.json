@@ -15,6 +15,7 @@
     "country-flag-icons": "^1.5.13",
     "molecule-3d-for-react": "^0.4.5",
     "react": "^18.3.1",
+    "react-chemdoodle": "^0.0.7",
     "react-dom": "^18.3.1",
     "react-molviewer": "^1.1.3",
     "react-scripts": "5.0.1",
