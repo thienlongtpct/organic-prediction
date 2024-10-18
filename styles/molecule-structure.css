@@ -1,0 +1,7 @@
+.molecule-structure-svg svg rect:first-of-type {
+  fill: transparent !important;
+}
+
+.dark-mode .molecule-structure-svg svg {
+  filter: invert(1) !important;
+}
