@@ -297,8 +297,8 @@ export default function Prediction() {
                                       Math.random() * randomProductFake.length
                                     )
                                   ];
-                                setDisplayedProduct(productFake);
                               }
+                              setDisplayedProduct(productFake);
                             }}
                           >
                             {translate("Predict", language)}
