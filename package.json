@@ -1,7 +1,7 @@
 {
-  "name": "organic-chemistry-reaction-prediction",
+  "name": "inict-reconnaissance",
   "version": "0.1.0",
-  "homepage": "https://thienlongtpct.github.io/organic-prediction",
+  "homepage": "https://thienlongtpct.github.io/inict-reconnaissance",
   "dependencies": {
     "@cutting/use-get-parent-size": "^2.1.16",
     "@emotion/react": "^11.13.3",
