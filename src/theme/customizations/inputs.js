@@ -8,8 +8,7 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { GREY } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const inputsCustomizations = {
+const inputsCustomizations = {
   MuiButtonBase: {
     defaultProps: {
       disableTouchRipple: true,
@@ -215,7 +214,7 @@ export const inputsCustomizations = {
   },
   MuiToggleButton: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         // padding: theme.spacing(1),
         textTransform: 'none',
         borderRadius: '10px',
@@ -264,7 +263,7 @@ export const inputsCustomizations = {
     },
   },
   MuiInputBase: {
-    styleOverrides: ({theme}) => ({
+    styleOverrides: () => ({
       root: {
         border: 'none',
         fontFamily: "Sans Serif",
@@ -336,3 +335,5 @@ export const inputsCustomizations = {
     },
   },
 };
+
+export default inputsCustomizations;

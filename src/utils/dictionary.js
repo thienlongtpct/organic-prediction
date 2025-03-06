@@ -1,45 +1,42 @@
 const dictionary = {
-  "Organic Chemistry Reaction Prediction": {
-    "vi": "Dự đoán Phản ứng Hoá học Hữu cơ",
+  "Student ID": {
+    "vi": "Mã học viên",
   },
-  "SMILES inputs": {
-    "vi": "Nhập dữ liệu dạng SMILES"
+  "Generate": {
+    "vi": "Tạo bài tập",
   },
-  "Reactants": {
-    "vi": "Chất phản ứng",
+  "Statement": {
+    "vi": "Đề bài",
   },
-  "Known reactants": {
-    "vi": "Chất tham gia phản ứng",
+  "Exercise 1": {
+    "vi": "Bài tập 1",
   },
-  "Products": {
-    "vi": "Sản phẩm",
+  "Exercise 2": {
+    "vi": "Bài tập 2",
   },
-  "Predicted products": {
-    "vi": "Sản phẩm dự đoán",
+  "Vo Minh Thien Long | InICT | Le Quy Don Technical University": {
+    "vi": "Võ Minh Thiên Long | Viện CNTT & TT | Đại học Kỹ thuật Lê Quý Đôn",
   },
-  "Structure diagram": {
-    "vi": "Cấu trúc 2D",
+  "Institue of Information Technology": {
+    "vi": "Viện Công nghệ thông tin",
   },
-  "3D structure": {
-    "vi": "Cấu trúc 3D",
+  "and Communication": {
+    "vi": "và Truyền thông",
   },
-  "Structure of": {
-    "vi": "Cấu trúc của",
+  "InICT": {
+    "vi": "Viện CNTT & TT",
   },
-  "Predict": {
-    "vi": "Dự đoán",
+  "Use Python programming language or other tools to implement the following requirements:\n": {
+    "vi": "Sử dụng ngôn ngữ lập trình Python hoặc các công cụ khác, thực hiện yêu cầu sau:\n",
   },
-  "Result": {
-    "vi": "Kết quả",
+  "Use prgramming language Python with BeautifulSoup library to implement this exercise:\n": {
+    "vi": "Sử dụng ngôn ngữ lập trình Python và thư viện BeautifulSoup để thực hiện yêu cầu sau:\n",
   },
-  "Formula": {
-    "vi": "Công thức",
-  }
 };
 
 export const translate = (keyword, language) => {
   if (!(keyword in dictionary)) return keyword;
-  const keyword_translated = dictionary[keyword];
-  if (!(language in keyword_translated)) return keyword;
-  return keyword_translated[language];
+  const keywordTranslated = dictionary[keyword];
+  if (!(language in keywordTranslated)) return keyword;
+  return keywordTranslated[language];
 };

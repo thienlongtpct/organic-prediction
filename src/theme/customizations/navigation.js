@@ -9,8 +9,7 @@ import { tabClasses } from '@mui/material/Tab';
 import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded';
 import { GREY } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const navigationCustomizations = {
+const navigationCustomizations = {
   MuiMenuItem: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -276,3 +275,5 @@ export const navigationCustomizations = {
     },
   },
 };
+
+export default navigationCustomizations;

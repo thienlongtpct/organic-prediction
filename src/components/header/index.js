@@ -12,7 +12,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   alignItems: "center",
   justifyContent: "space-between",
   flexShrink: 0,
-  background: theme.palette.background.default,
+  background: theme.palette.primary.main,
   border: `1px solid ${theme.palette.divider}`,
   boxShadow: "none",
   backgroundImage: "none",

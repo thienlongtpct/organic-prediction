@@ -27,17 +27,17 @@ export const GREY = {
   500_80: alpha('#919EAB', 0.8)
 };
 export const PRIMARY = {
-  lighter: '#C8FACD',
-  light: '#5BE584',
-  main: '#00AB55',
-  dark: '#007B55',
-  darker: '#005249',
+  lighter: '#5C54BF',
+  light: '#3C358F',
+  main: '#242056',
+  dark: '#1D1A45',
+  darker: '#161334',
   contrastText: '#fff',
 };
 export const SECONDARY = {
   lighter: '#D6E4FF',
   light: '#84A9FF',
-  main: '#3366FF',
+  main: '#242056',
   dark: '#1939B7',
   darker: '#091A7A',
   contrastText: '#fff'
@@ -94,6 +94,7 @@ export const getDesignTokens = () => {
       },
       background: {
         paper: "#fff",
+        primary: "#E4E2F4",
         default: GREY[100],
         neutral: GREY[200],
       },

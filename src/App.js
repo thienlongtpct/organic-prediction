@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import Prediction from "./pages/Prediction";
+import Generator from "./pages/Generator";
 
-export default function App(props) {
+export default function App() {
   return (
-      <Prediction />
+      <Generator />
   );
 }

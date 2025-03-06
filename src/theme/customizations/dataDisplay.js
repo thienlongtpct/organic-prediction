@@ -6,8 +6,7 @@ import { chipClasses } from '@mui/material/Chip';
 import { iconButtonClasses } from '@mui/material/IconButton';
 import { GREY } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const dataDisplayCustomizations = {
+const dataDisplayCustomizations = {
   MuiList: {
     styleOverrides: {
       root: {
@@ -231,3 +230,5 @@ export const dataDisplayCustomizations = {
     },
   },
 };
+
+export default dataDisplayCustomizations;
