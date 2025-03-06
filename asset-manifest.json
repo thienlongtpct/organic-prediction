@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/organic-prediction/static/js/main.3b23e17d.js",
+    "main.js": "/organic-prediction/static/js/main.1ed74a5b.js",
     "index.html": "/organic-prediction/index.html",
-    "main.3b23e17d.js.map": "/organic-prediction/static/js/main.3b23e17d.js.map"
+    "main.1ed74a5b.js.map": "/organic-prediction/static/js/main.1ed74a5b.js.map"
   },
   "entrypoints": [
-    "static/js/main.3b23e17d.js"
+    "static/js/main.1ed74a5b.js"
   ]
 }
